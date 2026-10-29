@@ -10,21 +10,21 @@ readme = "README.md"
 license = { text = "MIT" }
 requires-python = ">=3.12"
 dependencies = [
-    "accelerate>=1.15.0",
-    "datasets>=5.1.0",
-    "fastapi>=0.162.0",
-    "matplotlib>=3.11.0",
-    "numpy>=2.5.0",
-    "pydantic>=2.14.0",
-    "scikit-learn>=1.9.0",
-    "structlog>=26.1.0",
-    "torch>=2.15.0",
-    "transformers>=5.21.0",
-    "uvicorn>=0.54.0",
+    "accelerate>=1.15.0,<2",
+    "datasets>=5.1.0,<6",
+    "fastapi>=0.162.0,<1",
+    "matplotlib>=3.11.0,<4",
+    "numpy>=2.5.0,<3",
+    "pydantic>=2.14.0,<3",
+    "scikit-learn>=1.9.0,<2",
+    "structlog>=26.1.0,<27",
+    "torch>=2.15.0,<3",
+    "transformers>=5.21.0,<6",
+    "uvicorn>=0.54.0,<1",
 ]
 
 [project.optional-dependencies]
-baseline = ["anthropic>=2.3.0"]
+baseline = ["anthropic>=2.3.0,<3"]
 
 [dependency-groups]
 dev = [
