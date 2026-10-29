@@ -1,7 +1,8 @@
 import pytest
 
 from clf.predict import Predictor
-from tests.conftest import LABELS
+
+LABELS = ["billing", "login", "shipping"]
 
 
 def test_given_saved_model_when_predicting_then_label_and_score_per_text(tiny_model_dir):

@@ -1,0 +1,39 @@
+name: train
+
+on:
+  workflow_dispatch:
+    inputs:
+      epochs:
+        description: Training epochs
+        default: "3"
+      sample:
+        description: Stratified subset size per split (0 = full dataset)
+        default: "0"
+
+permissions:
+  contents: write
+
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.3.3
+      - run: uv sync
+      - name: Train and evaluate
+        env:
+          EPOCHS: ${{ inputs.epochs }}
+          SAMPLE: ${{ inputs.sample }}
+        run: uv run python -m clf.train --epochs "$EPOCHS" --sample "$SAMPLE"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: model
+          path: artifacts/model
+      - name: Commit results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add results/metrics.json results/confusion_matrix.png
+          git commit -m "Update training results"
+          git push

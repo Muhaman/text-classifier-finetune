@@ -52,9 +52,10 @@ def create_app(predictor: Predictor | None = None) -> FastAPI:
     async def validation_error(_request: Request, exc: RequestValidationError) -> JSONResponse:
         first = exc.errors()[0]
         location = ".".join(str(part) for part in first["loc"])
+        message = f"{location}: {first['msg']}"
         return JSONResponse(
             status_code=422,
-            content={"error": {"code": "validation_error", "message": f"{location}: {first['msg']}"}},
+            content={"error": {"code": "validation_error", "message": message}},
         )
 
     @app.get("/healthz")
@@ -64,8 +65,8 @@ def create_app(predictor: Predictor | None = None) -> FastAPI:
     @app.post("/v1/predict")
     def predict(body: PredictRequest, request: Request) -> PredictResponse:
         # Sync endpoint: inference is CPU-bound, so FastAPI runs it in its threadpool.
-        predictor_: Predictor = request.app.state.predictor
-        return PredictResponse(predictions=predictor_.predict(body.texts))
+        active: Predictor = request.app.state.predictor
+        return PredictResponse(predictions=active.predict(body.texts))
 
     return app
 
