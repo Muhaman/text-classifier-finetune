@@ -83,7 +83,8 @@ def train(cfg: TrainConfig, results_dir: Path = RESULTS_DIR) -> Path:
     (cfg.output_dir / LABEL_NAMES_FILE).write_text(json.dumps(label_names))
 
     output = trainer.predict(tokenized["test"])
-    scores = compute_metrics((output.predictions, output.label_ids))
+    logits: Any = output.predictions
+    scores = compute_metrics((logits, output.label_ids))
     log.info("evaluated", **scores)
 
     results_dir.mkdir(parents=True, exist_ok=True)
@@ -97,7 +98,7 @@ def train(cfg: TrainConfig, results_dir: Path = RESULTS_DIR) -> Path:
     }
     (results_dir / "metrics.json").write_text(json.dumps(metrics, indent=2) + "\n")
     _save_confusion_matrix(
-        output.label_ids, output.predictions.argmax(axis=-1), results_dir / "confusion_matrix.png"
+        output.label_ids, logits.argmax(axis=-1), results_dir / "confusion_matrix.png"
     )
     return cfg.output_dir
 

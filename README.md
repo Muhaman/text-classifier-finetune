@@ -62,7 +62,10 @@ uv run --extra baseline python scripts/zero_shot_baseline.py --n 200
 
 ## Results
 
-Pending: the full training run has not finished yet. The numbers will be copied from `results/metrics.json` once the `train` workflow completes.
+The model has not been trained in this repo yet, so there are no reported numbers. To produce them:
+
+1. Run the `train` workflow: Actions -> `train` -> Run workflow (inputs `epochs` default 3, `sample` default 0 = full dataset; use `sample=4000` for a faster run). Or train locally with `uv run python -m clf.train`.
+2. The run writes `results/metrics.json` (accuracy, macro-F1, epochs, train/test sizes, model name, timestamp) and `results/confusion_matrix.png`. The workflow commits both to `main` and uploads the model as an artifact.
 
 ## Design decisions & trade-offs
 
